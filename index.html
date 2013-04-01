@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>prototate</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="annotator.min.css" />
+        <script type="text/javascript" src="annotator-full.min.js"></script>
+        <script type="text/javascript" src="marginannotator.js"></script>
+        <script type="text/javascript">
+            var menuVisible = false;
+            var colorpickerVisible = false;
+            var shapepickerVisible = false;
+            var drawing = false;
+            var inText = false;
+            var gradesVisible = false;
+            var rightTopPadding = 50;
+
+            function load() {
+                var canvas = document.getElementById("pagecanvas"),
+                    ctx = canvas.getContext("2d"),
+                    painting = false,
+                    lastX = 0,
+                    lastY = 0,
+                    lineThickness = 1;
+
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                canvas.onmousedown = function (e) {
+                    if (drawing) {
+                        painting = true;
+                        ctx.fillStyle = "#CD1F21";
+                        lastX = e.pageX - this.offsetLeft;
+                        lastY = e.pageY - this.offsetTop;
+                    }
+                };
+
+                canvas.onmouseup = function (e) {
+                    if (drawing) {
+                        painting = false;
+                    }
+                }
+
+                canvas.onmousemove = function (e) {
+                    if (drawing) {
+                        if (painting) {
+                            mouseX = e.pageX - this.offsetLeft;
+                            mouseY = e.pageY - this.offsetTop;
+                            var x1 = mouseX,
+                                x2 = lastX,
+                                y1 = mouseY,
+                                y2 = lastY;
+                            var steep = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
+                            if (steep) {
+                                var x = x1;
+                                x1 = y1;
+                                y1 = x;
+                                var y = y2;
+                                y2 = x2;
+                                x2 = y;
+                            }
+                            if (x1 > x2) {
+                                var x = x1;
+                                x1 = x2;
+                                x2 = x;
+                                var y = y1;
+                                y1 = y2;
+                                y2 = y;
+                            }
+                            var dx = x2 - x1,
+                                dy = Math.abs(y2 - y1),
+                                error = 0,
+                                de = dy / dx,
+                                yStep = -1,
+                                y = y1;
+                            if (y1 < y2) {
+                                yStep = 1;
+                            }
+                            lineThickness = 5 - Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) / 10;
+                            if (lineThickness < 1) {
+                                lineThickness = 1;
+                            }
+                            for (var x = x1; x < x2; x++) {
+                                if (steep) {
+                                    ctx.fillRect(y, x, lineThickness, lineThickness);
+                                } else {
+                                    ctx.fillRect(x, y, lineThickness, lineThickness);
+                                }
+
+                                error += de;
+                                if (error >= 0.5) {
+                                    y += yStep;
+                                    error -= 1.0;
+                                }
+                            }
+                            lastX = mouseX;
+                            lastY = mouseY;
+                        }
+                    }
+                }
+
+                document.onmouseup = gText;
+                document.getElementById('annotatebutton').onclick = customAnnotate;
+                if (!document.all) document.captureEvents(Event.MOUSEUP);
+            }
+
+            function gText(e) {
+                var t = document.getSelection();
+                console.log(inText);
+                if ($('div.popup').length == 0 && t.toString().length > 0) {
+                    inText = true;
+                    $("body").append('<div class="popup" style="position:absolute; background-color:#FFFFFF; border-style:solid; top:' + e.pageY + 'px; left:' + e.pageX + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input type=button value="Save" onclick="saveComment(' + e.pageY + ')"></form></div>');
+                }
+            }
+
+            function customAnnotate(e) {
+                if ($('div.popup').length == 0) {
+                    inText = true;
+                    $("body").append('<div class="popup" style="position:absolute; background-color:#FFFFFF; border-style:solid; top:' + (e.pageY+20) + 'px; left:' + (e.pageX-50) + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input type=button value="Save" onclick="saveCommentRight(' + e.pageY + ')"></form></div>');
+                }
+            }
+
+            function drawButtonClick() {
+                if (drawing == false) {
+                    $("#pagecanvas").css("z-index", 5);
+                    drawing = true;
+                    $("#pencilicon").attr("src", "imgs/2newpencil.jpg");
+                }
+                else {
+                    $("#pagecanvas").css("z-index", 1);
+                    drawing = false;
+                    $("#pencilicon").attr("src", "imgs/2pencil.jpg");
+                }
+            }
+
+            function gradeButtonClick() {
+                if (gradesVisible == false) {
+                    $("#leftcontent").css("width", "80%");
+                    $("#rightcontent").css("width", "20%");
+                    $("#grades").show();
+                    gradesVisible = true;
+                }
+                else {
+                    $("#leftcontent").css("width", "95%");
+                    $("#rightcontent").css("width", "0%");
+                    $("#grades").hide();
+                    gradesVisible = false;
+                }
+            }
+
+            function saveComment(pageY) {
+                $("body").append('<div class="margin" style="position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '</div>');
+                $('div.popup').remove();
+            }
+
+            function saveCommentRight(pageY) {
+                $("body").append('<div class="margin" style="position:absolute; top:' + (pageY+rightTopPadding) + 'px; right:0px">' + $("#annotate").val() + '</div>');
+                $('div.popup').remove();
+                rightTopPadding += 50;
+            }
+
+                function bodyClick() {
+                    if (inText == false) {
+                        $('div.popup').remove();
+                    }
+                    inText = false;
+                }
+
+                function annotationButtonClick() {
+                    if (menuVisible == false) {
+                        menuVisible = true;
+                        $("#expand").show();
+                    }
+                    else {
+                        menuVisible = false;
+                        $("#expand").hide();
+                    }
+                }
+
+                function colorButtonClick() {
+                    shapepickerVisible = false;
+                    $("#shapepicker").hide();
+                    if (colorpickerVisible == false) {
+                        colorpickerVisible = true;
+                        $("#colorpicker").show();
+                    }
+                    else {
+                        colorpickerVisible = false;
+                        $("#colorpicker").hide();
+                    }
+                }
+
+                function shapeButtonClick() {
+                    colorpickerVisible = false;
+                    $("#colorpicker").hide();
+                    if (shapepickerVisible == false) {
+                        shapepickerVisible = true;
+                        $("#shapepicker").show();
+                    }
+                    else {
+                        shapepickerVisible = false;
+                        $("#shapepicker").hide();
+                    }
+                }
+        </script>
+        <style type="text/css">
+            body {
+                font-family: "Verdana";
+                position: relative;
+                height:100%;
+                width:100%;
+            }
+            pre {
+                white-space: pre-wrap;       /* css-3 */
+                white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                white-space: -pre-wrap;      /* Opera 4-6 */
+                white-space: -o-pre-wrap;    /* Opera 7 */
+                word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            }
+            .content_mid {
+                margin-left: 20%;
+                margin-right: 20%;
+                border-style: solid;
+                padding: 10px;
+                position:absolute;
+                z-index:2;
+                top: 0px;
+            }
+            .pagecanvas {
+                position:absolute;
+                z-index: 1;
+            }
+            .popup {
+                position:absolute;
+                z-index: 3;
+            }
+            .menubutton {
+                float: right;
+                border-style: solid;
+                padding: 3px;
+                cursor: pointer;
+                background-color: #FFFFFF;
+                position: relative;
+                z-index: 6;
+            }
+            .menuicon {
+                float: right;
+                cursor: pointer;
+                background-color: #FFFFFF;
+                position: relative;
+                z-index: 6;
+            }
+            .dropdown {
+                position: absolute;
+                margin-top: 33px;
+                border-style: solid;
+            }
+            .margin {
+                border-style: solid;
+                border-color: #A9C7E8;
+                border-radius:5px;
+                background-color: #323332;
+                color: #FFFFFF;
+                padding: 3px;
+                width: 15%;
+                white-space: pre-wrap;      /* CSS3 */   
+                white-space: -moz-pre-wrap; /* Firefox */    
+                white-space: -pre-wrap;     /* Opera <7 */   
+                white-space: -o-pre-wrap;   /* Opera 7 */    
+                word-wrap: break-word;      /* IE */
+            }
+            .grades {
+                border-style:solid;
+                padding:10px;
+                float:right;
+                position:relative;
+                right:0px;
+                top:0px;
+                width:80%;
+                height:100%;
+                display:none;
+            }
+            .leftcontent {
+                float:left;
+                position:relative;
+                width:95%;
+                height:100%;
+            }
+            .rightcontent {
+                float:right;
+                position:relative;
+                right:30px;
+                width:0%;
+                height:100%;
+            }
+        </style>
+    </head>
+    <body onload="load()">
+        <div class="leftcontent" id="leftcontent">
+            <div class="toolbar">
+                <div class="menubutton" onclick="gradeButtonClick()">Grading</div>
+                <div class="menubutton" onclick="annotationButtonClick()">Annotation</div>
+                <div class="menubutton" id="expand" style="display:none">
+                    <div class="menuicon">
+                        <img src="imgs/5annotate.jpg" id="annotatebutton"/>
+                    </div>
+                    <div class="menuicon">
+                        <img src="imgs/4thickness.jpg" />
+                    </div>
+                    <div class="menuicon">
+                        <img src="imgs/3shape.jpg" onclick="shapeButtonClick()"/>
+                    </div>
+                    <div class="menuicon">
+                        <img id="pencilicon" src="imgs/2pencil.jpg" onclick="drawButtonClick()"/>
+                    </div>
+                    <div class="menuicon" onclick="colorButtonClick()">
+                        <img src="imgs/1newcolor.jpg" />
+                    </div>
+                    <div class="dropdown" id="colorpicker" style="display:none">
+                        <img src="imgs/colorpicker.jpg" />
+                    </div>
+                    <div class="dropdown" id="shapepicker" style="display:none; margin-left:60px">
+                        <img src="imgs/shapepicker.jpg" />
+                    </div>
+                </div>
+            </div>
+            <div class="content_mid" id="content" onclick="bodyClick()">
+                <p>Sample Document</p>
+                <p>&nbsp;</p>
+                <p>&emsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras consequat ullamcorper augue imperdiet semper. Aenean ac diam lectus. Etiam odio lorem, posuere eget lacinia et, tristique a justo. Phasellus dictum eleifend purus id tempus. Vestibulum at erat nec nunc tincidunt pharetra ac eu nulla. Duis venenatis viverra ante, in porta diam molestie nec. Nunc ligula erat, sollicitudin sed eleifend nec, facilisis ac justo. Vestibulum viverra tellus sit amet turpis venenatis congue. Curabitur quis odio lorem, at accumsan felis.</p>
+                <p>&emsp;Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam vulputate felis nec arcu facilisis eu hendrerit eros eleifend. Nulla facilisi. Proin lobortis diam euismod justo scelerisque rutrum. Donec commodo, quam ut porta vehicula, massa magna malesuada urna, in volutpat metus lectus at ante. Fusce id vestibulum odio. Phasellus a quam eget nibh vulputate consectetur vel non dui. Nullam augue nisl, sagittis at sollicitudin sit amet, malesuada at nibh. Sed interdum varius nulla ac sagittis. Nunc commodo, risus id suscipit interdum, metus sem rhoncus felis, id congue elit est a mi. Cras a nisi lacus. Aenean faucibus tincidunt arcu, non tincidunt arcu gravida quis. Donec sapien diam, venenatis non interdum sed, dignissim sit amet nisi. Maecenas tempus eros odio, at semper lacus.</p>
+                <p>&emsp;Vivamus consectetur consectetur dignissim. Donec tempus pulvinar urna a luctus. Sed vulputate venenatis lectus in pellentesque. Etiam auctor convallis lacus, a bibendum mi tincidunt et. Curabitur sodales pharetra lorem scelerisque sagittis. Proin nec porttitor dolor. Praesent faucibus volutpat rutrum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus viverra, sem ac rhoncus tincidunt, risus nisi viverra elit, in porttitor elit dolor lacinia arcu. Quisque venenatis, risus iaculis molestie laoreet, lacus arcu pulvinar dui, aliquet bibendum dolor turpis eu nulla. Fusce placerat urna in lorem consequat fringilla. Pellentesque tincidunt sem non est auctor tempor. Vivamus pellentesque mattis volutpat. </p>
+                <p>&emsp;Proin sagittis hendrerit commodo. Pellentesque interdum sem ac dolor aliquam eu ornare lorem elementum. Curabitur viverra, risus ut elementum rutrum, purus odio aliquam ante, non congue justo diam non libero. Aenean quis faucibus ligula. Suspendisse ac odio vel purus placerat mattis. Nunc in dui orci, a malesuada sem. Integer scelerisque purus sem, in blandit nisi. Aliquam lobortis porttitor metus elementum euismod. </p>
+                <p>&emsp;Nulla a convallis leo. Proin non ligula sit amet nisl suscipit hendrerit rutrum id nunc. Suspendisse potenti. Morbi vestibulum quam id erat dictum fringilla. Quisque ac aliquam est. In hac habitasse platea dictumst. Maecenas accumsan justo vitae lorem euismod suscipit. Sed imperdiet porta metus sit amet sagittis. Nullam pharetra arcu a elit iaculis eget ultricies risus gravida. Donec condimentum metus ut urna varius consectetur. Sed laoreet urna sit amet orci congue sollicitudin. </p>
+                <p>&emsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras consequat ullamcorper augue imperdiet semper. Aenean ac diam lectus. Etiam odio lorem, posuere eget lacinia et, tristique a justo. Phasellus dictum eleifend purus id tempus. Vestibulum at erat nec nunc tincidunt pharetra ac eu nulla. Duis venenatis viverra ante, in porta diam molestie nec. Nunc ligula erat, sollicitudin sed eleifend nec, facilisis ac justo. Vestibulum viverra tellus sit amet turpis venenatis congue. Curabitur quis odio lorem, at accumsan felis.</p>
+                <p>&emsp;Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam vulputate felis nec arcu facilisis eu hendrerit eros eleifend. Nulla facilisi. Proin lobortis diam euismod justo scelerisque rutrum. Donec commodo, quam ut porta vehicula, massa magna malesuada urna, in volutpat metus lectus at ante. Fusce id vestibulum odio. Phasellus a quam eget nibh vulputate consectetur vel non dui. Nullam augue nisl, sagittis at sollicitudin sit amet, malesuada at nibh. Sed interdum varius nulla ac sagittis. Nunc commodo, risus id suscipit interdum, metus sem rhoncus felis, id congue elit est a mi. Cras a nisi lacus. Aenean faucibus tincidunt arcu, non tincidunt arcu gravida quis. Donec sapien diam, venenatis non interdum sed, dignissim sit amet nisi. Maecenas tempus eros odio, at semper lacus.</p>
+            </div>
+            <canvas class="pagecanvas" id="pagecanvas">
+            </canvas>
+        </div>
+        <div class="rightcontent" id="rightcontent">
+            <div class="grades" id="grades">
+                <p>Sample Grading Rubric</p>
+                <p>&nbsp;</p>
+                <div style="width:50%; float:left; display:inline-block;">
+                    <div style="height:40px"><u>Requirements</u></div>
+                    <div style="height:40px">Formatting</div>
+                    <div style="height:40px">British Perspective</div>
+                    <div style="height:40px">Tea Act</div>
+                    <div style="height:40px">Add New...</div>
+                    <div style="height:40px"><b>Total Grade</b></div>
+                </div>
+                <div style="width:50%; float:right">
+                    <div style="height:40px"><u>Points/Total</u></div>
+                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
+                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
+                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
+                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
+                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
