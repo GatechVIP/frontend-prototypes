@@ -3,9 +3,6 @@
     <head>
         <title>prototate</title>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="annotator.min.css" />
-        <script type="text/javascript" src="annotator-full.min.js"></script>
-        <script type="text/javascript" src="marginannotator.js"></script>
         <script type="text/javascript">
             var menuVisible = false;
             var colorpickerVisible = false;
@@ -23,7 +20,7 @@
                     lastY = 0,
                     lineThickness = 1;
 
-                canvas.width = window.innerWidth;
+                canvas.width = window.innerWidth-25;
                 canvas.height = window.innerHeight;
 
                 canvas.onmousedown = function (e) {
@@ -141,7 +138,7 @@
                     gradesVisible = true;
                 }
                 else {
-                    $("#leftcontent").css("width", "95%");
+                    $("#leftcontent").css("width", "100%");
                     $("#rightcontent").css("width", "0%");
                     $("#grades").hide();
                     gradesVisible = false;
@@ -209,6 +206,8 @@
                 position: relative;
                 height:100%;
                 width:100%;
+                padding: 0px;
+                margin: 0;
             }
             pre {
                 white-space: pre-wrap;       /* css-3 */
@@ -283,7 +282,7 @@
             .leftcontent {
                 float:left;
                 position:relative;
-                width:95%;
+                width:100%;
                 height:100%;
             }
             .rightcontent {
@@ -292,6 +291,11 @@
                 right:30px;
                 width:0%;
                 height:100%;
+            }
+            .toolbar {
+                width:99%;
+                right:10px;
+                position:relative;
             }
         </style>
     </head>
