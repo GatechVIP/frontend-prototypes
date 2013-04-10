@@ -132,8 +132,8 @@
 
             function gradeButtonClick() {
                 if (gradesVisible == false) {
-                    $("#leftcontent").css("width", "80%");
-                    $("#rightcontent").css("width", "20%");
+                    $("#leftcontent").css("width", "75%");
+                    $("#rightcontent").css("width", "25%");
                     $("#grades").show();
                     gradesVisible = true;
                 }
@@ -156,49 +156,73 @@
                 rightTopPadding += 50;
             }
 
-                function bodyClick() {
-                    if (inText == false) {
-                        $('div.popup').remove();
-                    }
-                    inText = false;
+            function bodyClick() {
+                if (inText == false) {
+                    $('div.popup').remove();
                 }
+                inText = false;
+            }
 
-                function annotationButtonClick() {
-                    if (menuVisible == false) {
-                        menuVisible = true;
-                        $("#expand").show();
-                    }
-                    else {
-                        menuVisible = false;
-                        $("#expand").hide();
-                    }
+            function annotationButtonClick() {
+                if (menuVisible == false) {
+                    menuVisible = true;
+                    $("#expand").show();
                 }
-
-                function colorButtonClick() {
-                    shapepickerVisible = false;
-                    $("#shapepicker").hide();
-                    if (colorpickerVisible == false) {
-                        colorpickerVisible = true;
-                        $("#colorpicker").show();
-                    }
-                    else {
-                        colorpickerVisible = false;
-                        $("#colorpicker").hide();
-                    }
+                else {
+                    menuVisible = false;
+                    $("#expand").hide();
                 }
+            }
 
-                function shapeButtonClick() {
+            function colorButtonClick() {
+                shapepickerVisible = false;
+                $("#shapepicker").hide();
+                if (colorpickerVisible == false) {
+                    colorpickerVisible = true;
+                    $("#colorpicker").show();
+                }
+                else {
                     colorpickerVisible = false;
                     $("#colorpicker").hide();
-                    if (shapepickerVisible == false) {
-                        shapepickerVisible = true;
-                        $("#shapepicker").show();
-                    }
-                    else {
-                        shapepickerVisible = false;
-                        $("#shapepicker").hide();
-                    }
                 }
+            }
+
+            function shapeButtonClick() {
+                colorpickerVisible = false;
+                $("#colorpicker").hide();
+                if (shapepickerVisible == false) {
+                    shapepickerVisible = true;
+                    $("#shapepicker").show();
+                }
+                else {
+                    shapepickerVisible = false;
+                    $("#shapepicker").hide();
+                }
+            }
+			
+			$(document).ready(function() {
+			    var gradediv = $('#gradediv');
+				var numtot = $('#gradenumtot');
+				var dentot = $('#gradedentot');
+				
+			    var changeCallback = function() {
+				    var num = 0;
+				    gradediv.find('.gradenum').each(function() {
+					    var n = parseInt($(this).val())
+					    num += isNaN(n) ? 0 : n;
+					});
+					numtot.val(''+num);
+					
+					var den = 0;
+					gradediv.find('.gradeden').each(function() {
+					    var n = parseInt($(this).val())
+					    den += isNaN(n) ? 0 : n;
+					});
+					dentot.val(''+den);
+				}
+				$('.gradenum').change(changeCallback);
+				$('.gradeden').change(changeCallback);
+			});
         </script>
         <style type="text/css">
             body {
@@ -226,7 +250,8 @@
                 top: 0px;
             }
             .pagecanvas {
-                position:absolute;
+                position:relative;
+				width: 100%;
                 z-index: 1;
             }
             .popup {
@@ -354,13 +379,13 @@
                     <div style="height:40px">Add New...</div>
                     <div style="height:40px"><b>Total Grade</b></div>
                 </div>
-                <div style="width:50%; float:right">
+                <div style="width:50%; float:right" id="gradediv">
                     <div style="height:40px"><u>Points/Total</u></div>
-                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
-                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
-                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
-                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
-                    <div style="height:40px"><textarea rows="1" cols="3"></textarea>/<textarea rows="1" cols="3"></textarea></div>
+                    <div style="height:40px"><input type="text" size=3 class="gradenum"/>/<input type="text" size=3 class="gradeden"/></div>
+                    <div style="height:40px"><input type="text" size=3 class="gradenum"/>/<input type="text" size=3 class="gradeden"/></div>
+                    <div style="height:40px"><input type="text" size=3 class="gradenum"/>/<input type="text" size=3 class="gradeden"/></div>
+                    <div style="height:40px"><input type="text" size=3 class="gradenum"/>/<input type="text" size=3 class="gradeden"/></div>
+                    <div style="height:40px"><input type="text" size=3 id="gradenumtot" disabled/>/<input type="text" size=3 id="gradedentot" disabled/></div>
                 </div>
             </div>
         </div>
