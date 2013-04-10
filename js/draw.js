@@ -82,7 +82,7 @@ function canvasInit() {
         }
     }
 
-    document.onmouseup = annotate;
+    document.getElementById('content').onmouseup = annotate;
     document.getElementById('annotatebutton').onclick = customAnnotate;
     if (!document.all) document.captureEvents(Event.MOUSEUP);
 }
