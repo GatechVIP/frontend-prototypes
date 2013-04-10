@@ -1,0 +1,25 @@
+﻿.margin {
+                border-style: solid;
+                border-color: #A9C7E8;
+                border-radius:5px;
+                background-color: #323332;
+                color: #FFFFFF;
+                padding: 3px;
+                width: 15%;
+                white-space: pre-wrap;      /* CSS3 */   
+                white-space: -moz-pre-wrap; /* Firefox */    
+                white-space: -pre-wrap;     /* Opera <7 */   
+                white-space: -o-pre-wrap;   /* Opera 7 */    
+                word-wrap: break-word;      /* IE */
+            }
+
+.popup {
+                position:absolute;
+                z-index: 3;
+            }
+
+.dropdown {
+                position: absolute;
+                margin-top: 33px;
+                border-style: solid;
+            }
