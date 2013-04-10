@@ -19,7 +19,195 @@
             var rightTopPadding = 50;
 
             function load() {
+<<<<<<< HEAD
                 canvasInit();
+            }
+=======
+                var canvas = document.getElementById("pagecanvas"),
+                    ctx = canvas.getContext("2d"),
+                    painting = false,
+                    lastX = 0,
+                    lastY = 0,
+                    lineThickness = 1;
+
+                canvas.width = window.innerWidth-25;
+                canvas.height = window.innerHeight;
+
+                canvas.onmousedown = function (e) {
+                    if (drawing) {
+                        painting = true;
+                        ctx.fillStyle = "#CD1F21";
+                        lastX = e.pageX - this.offsetLeft;
+                        lastY = e.pageY - this.offsetTop;
+                    }
+                };
+
+                canvas.onmouseup = function (e) {
+                    if (drawing) {
+                        painting = false;
+                    }
+                }
+
+                canvas.onmousemove = function (e) {
+                    if (drawing) {
+                        if (painting) {
+                            mouseX = e.pageX - this.offsetLeft;
+                            mouseY = e.pageY - this.offsetTop;
+                            var x1 = mouseX,
+                                x2 = lastX,
+                                y1 = mouseY,
+                                y2 = lastY;
+                            var steep = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
+                            if (steep) {
+                                var x = x1;
+                                x1 = y1;
+                                y1 = x;
+                                var y = y2;
+                                y2 = x2;
+                                x2 = y;
+                            }
+                            if (x1 > x2) {
+                                var x = x1;
+                                x1 = x2;
+                                x2 = x;
+                                var y = y1;
+                                y1 = y2;
+                                y2 = y;
+                            }
+                            var dx = x2 - x1,
+                                dy = Math.abs(y2 - y1),
+                                error = 0,
+                                de = dy / dx,
+                                yStep = -1,
+                                y = y1;
+                            if (y1 < y2) {
+                                yStep = 1;
+                            }
+                            lineThickness = 5 - Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) / 10;
+                            if (lineThickness < 1) {
+                                lineThickness = 1;
+                            }
+                            for (var x = x1; x < x2; x++) {
+                                if (steep) {
+                                    ctx.fillRect(y, x, lineThickness, lineThickness);
+                                } else {
+                                    ctx.fillRect(x, y, lineThickness, lineThickness);
+                                }
+
+                                error += de;
+                                if (error >= 0.5) {
+                                    y += yStep;
+                                    error -= 1.0;
+                                }
+                            }
+                            lastX = mouseX;
+                            lastY = mouseY;
+                        }
+                    }
+                }
+
+                document.onmouseup = gText;
+                document.getElementById('annotatebutton').onclick = customAnnotate;
+                if (!document.all) document.captureEvents(Event.MOUSEUP);
+            }
+
+            function gText(e) {
+                var t = document.getSelection();
+                console.log(inText);
+                if ($('div.popup').length == 0 && t.toString().length > 0) {
+                    inText = true;
+                    $("body").append('<div class="popup" style="position:absolute; background-color:#FFFFFF; border-style:solid; top:' + e.pageY + 'px; left:' + e.pageX + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input type=button value="Save" onclick="saveComment(' + e.pageY + ')"></form></div>');
+                }
+            }
+
+            function customAnnotate(e) {
+                if ($('div.popup').length == 0) {
+                    inText = true;
+                    $("body").append('<div class="popup" style="position:absolute; background-color:#FFFFFF; border-style:solid; top:' + (e.pageY+20) + 'px; left:' + (e.pageX-50) + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input type=button value="Save" onclick="saveCommentRight(' + e.pageY + ')"></form></div>');
+                }
+            }
+
+            function drawButtonClick() {
+                if (drawing == false) {
+                    $("#pagecanvas").css("z-index", 5);
+                    drawing = true;
+                    $("#pencilicon").attr("src", "imgs/2newpencil.jpg");
+                }
+                else {
+                    $("#pagecanvas").css("z-index", 1);
+                    drawing = false;
+                    $("#pencilicon").attr("src", "imgs/2pencil.jpg");
+                }
+            }
+
+            function gradeButtonClick() {
+                if (gradesVisible == false) {
+                    $("#leftcontent").css("width", "75%");
+                    $("#rightcontent").css("width", "25%");
+                    $("#grades").show();
+                    gradesVisible = true;
+                }
+                else {
+                    $("#leftcontent").css("width", "100%");
+                    $("#rightcontent").css("width", "0%");
+                    $("#grades").hide();
+                    gradesVisible = false;
+                }
+            }
+
+            function saveComment(pageY) {
+                $("body").append('<div class="margin" style="position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '</div>');
+                $('div.popup').remove();
+            }
+
+            function saveCommentRight(pageY) {
+                $("body").append('<div class="margin" style="position:absolute; top:' + (pageY+rightTopPadding) + 'px; right:0px">' + $("#annotate").val() + '</div>');
+                $('div.popup').remove();
+                rightTopPadding += 50;
+            }
+
+            function bodyClick() {
+                if (inText == false) {
+                    $('div.popup').remove();
+                }
+                inText = false;
+            }
+
+            function annotationButtonClick() {
+                if (menuVisible == false) {
+                    menuVisible = true;
+                    $("#expand").show();
+                }
+                else {
+                    menuVisible = false;
+                    $("#expand").hide();
+                }
+            }
+
+            function colorButtonClick() {
+                shapepickerVisible = false;
+                $("#shapepicker").hide();
+                if (colorpickerVisible == false) {
+                    colorpickerVisible = true;
+                    $("#colorpicker").show();
+                }
+                else {
+                    colorpickerVisible = false;
+                    $("#colorpicker").hide();
+                }
+            }
+
+            function shapeButtonClick() {
+                colorpickerVisible = false;
+                $("#colorpicker").hide();
+                if (shapepickerVisible == false) {
+                    shapepickerVisible = true;
+                    $("#shapepicker").show();
+                }
+                else {
+                    shapepickerVisible = false;
+                    $("#shapepicker").hide();
+                }
             }
 			
 			$(document).ready(function() {
@@ -45,6 +233,7 @@
 				$('.gradenum').change(changeCallback);
 				$('.gradeden').change(changeCallback);
 			});
+>>>>>>> c653ee3106278edc9d77e5d0565168bc00e8cf92
         </script>
         <style type="text/css">
             body {
@@ -71,6 +260,18 @@
                 z-index:2;
                 top: 0px;
             }
+<<<<<<< HEAD
+=======
+            .pagecanvas {
+                position:relative;
+				width: 100%;
+                z-index: 1;
+            }
+            .popup {
+                position:absolute;
+                z-index: 3;
+            }
+>>>>>>> c653ee3106278edc9d77e5d0565168bc00e8cf92
             .menubutton {
                 float: right;
                 border-style: solid;
