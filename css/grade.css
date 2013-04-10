@@ -5,7 +5,8 @@
                 position:relative;
                 right:0px;
                 top:0px;
-                width:80%;
+                width:90%;
                 height:100%;
                 display:none;
+                z-index:5000;
             }
