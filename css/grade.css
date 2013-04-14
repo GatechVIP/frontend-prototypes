@@ -1,0 +1,12 @@
+﻿.grades {
+                border-style:solid;
+                padding:10px;
+                float:right;
+                position:relative;
+                right:0px;
+                top:0px;
+                width:90%;
+                height:100%;
+                display:none;
+                z-index:5000;
+            }
