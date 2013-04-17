@@ -10,8 +10,6 @@ function canvasInit() {
 	canvas.width = canvas.offsetWidth;
 	
     canvas.onmousedown = function (e) {
-		console.log("canvas mousedown");
-		console.log(drawing);
         if (drawing) {
             painting = true;
             ctx.fillStyle = "#CD1F21";
@@ -21,16 +19,12 @@ function canvasInit() {
     };
 
     canvas.onmouseup = function (e) {
-		console.log("canvas mouseup");
-		console.log(drawing);
         if (drawing) {
             painting = false;
         }
     }
 
     canvas.onmousemove = function (e) {
-		console.log("canvas mousemove");
-		console.log(drawing, painting);
         if (drawing) {
             if (painting) {
                 mouseX = e.pageX - this.parentNode.offsetLeft;
@@ -69,7 +63,6 @@ function canvasInit() {
                 if (lineThickness < 1) {
                     lineThickness = 1;
                 }
-				console.log(x1, y1, x2, y2);
                 for (var x = x1; x < x2; x++) {
                     if (steep) {
                         ctx.fillRect(y, x, lineThickness, lineThickness);
@@ -96,12 +89,12 @@ function canvasInit() {
 
 function drawButtonClick() {
     if (drawing == false) {
-        $("#pagecanvas").css("z-index", 5);
+        $("#pagecanvas").css("z-index", 9999);
         drawing = true;
         $("#pencilicon").attr("src", "imgs/2newpencil.jpg");
     }
     else {
-        $("#pagecanvas").css("z-index", 1);
+        $("#pagecanvas").css("z-index", -9999);
         drawing = false;
         $("#pencilicon").attr("src", "imgs/2pencil.jpg");
     }
