@@ -25,27 +25,7 @@
             }
 			
 			$(document).ready(function() {
-			    var gradediv = $('#gradediv');
-				var numtot = $('#gradenumtot');
-				var dentot = $('#gradedentot');
 				
-			    var changeCallback = function() {
-				    var num = 0;
-				    gradediv.find('.gradenum').each(function() {
-					    var n = parseInt($(this).val())
-					    num += isNaN(n) ? 0 : n;
-					});
-					numtot.val(''+num);
-					
-					var den = 0;
-					gradediv.find('.gradeden').each(function() {
-					    var n = parseInt($(this).val())
-					    den += isNaN(n) ? 0 : n;
-					});
-					dentot.val(''+den);
-				}
-				$('.gradenum').change(changeCallback);
-				$('.gradeden').change(changeCallback);
 			});
         </script>
         <style type="text/css">
@@ -156,7 +136,7 @@
             <div class="grades" id="grades">
                 <p>Sample Grading Rubric</p>
                 <p>&nbsp;</p>
-                <div style="width:50%; float:left; display:inline-block;">
+                <!--<div style="width:50%; float:left; display:inline-block;">
                     <div style="height:40px"><u>Requirements</u></div>
                     <div style="height:40px">Formatting</div>
                     <div style="height:40px">British Perspective</div>
@@ -171,7 +151,11 @@
                     <div style="height:40px"><input type="text" size=3 class="gradenum"/>/<input type="text" size=3 class="gradeden"/></div>
                     <div style="height:40px"><input type="text" size=3 class="gradenum"/>/<input type="text" size=3 class="gradeden"/></div>
                     <div style="height:40px"><input type="text" size=3 id="gradenumtot" disabled/>/<input type="text" size=3 id="gradedentot" disabled/></div>
-                </div>
+                </div>-->
+				<div id="gradediv">
+				    <div>Requirements     Points/Total<button id="gradeadd">+</button></div>
+				</div>
+				<div>Total     <input type="text" size=3 id="gradenumtot" disabled/>/<input type="text" size=3 id="gradenumtot" disabled/></div>
             </div>
         </div>
     </body>
