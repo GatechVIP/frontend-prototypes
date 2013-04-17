@@ -6,29 +6,35 @@ function canvasInit() {
                     lastY = 0,
                     lineThickness = 1;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
+	canvas.height = canvas.offsetHeight;
+	canvas.width = canvas.offsetWidth;
+	
     canvas.onmousedown = function (e) {
+		console.log("canvas mousedown");
+		console.log(drawing);
         if (drawing) {
             painting = true;
             ctx.fillStyle = "#CD1F21";
-            lastX = e.pageX - this.offsetLeft;
-            lastY = e.pageY - this.offsetTop;
+            lastX = e.pageX - this.parentNode.offsetLeft;
+            lastY = e.pageY - this.parentNode.offsetTop;
         }
     };
 
     canvas.onmouseup = function (e) {
+		console.log("canvas mouseup");
+		console.log(drawing);
         if (drawing) {
             painting = false;
         }
     }
 
     canvas.onmousemove = function (e) {
+		console.log("canvas mousemove");
+		console.log(drawing, painting);
         if (drawing) {
             if (painting) {
-                mouseX = e.pageX - this.offsetLeft;
-                mouseY = e.pageY - this.offsetTop;
+                mouseX = e.pageX - this.parentNode.offsetLeft;
+                mouseY = e.pageY - this.parentNode.offsetTop;
                 var x1 = mouseX,
                     x2 = lastX,
                     y1 = mouseY,
@@ -63,6 +69,7 @@ function canvasInit() {
                 if (lineThickness < 1) {
                     lineThickness = 1;
                 }
+				console.log(x1, y1, x2, y2);
                 for (var x = x1; x < x2; x++) {
                     if (steep) {
                         ctx.fillRect(y, x, lineThickness, lineThickness);
