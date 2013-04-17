@@ -6,15 +6,15 @@ function canvasInit() {
                     lastY = 0,
                     lineThickness = 1;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
+	canvas.height = canvas.offsetHeight;
+	canvas.width = canvas.offsetWidth;
+	
     canvas.onmousedown = function (e) {
         if (drawing) {
             painting = true;
             ctx.fillStyle = "#CD1F21";
-            lastX = e.pageX - this.offsetLeft;
-            lastY = e.pageY - this.offsetTop;
+            lastX = e.pageX - this.parentNode.offsetLeft;
+            lastY = e.pageY - this.parentNode.offsetTop;
         }
     };
 
@@ -27,8 +27,8 @@ function canvasInit() {
     canvas.onmousemove = function (e) {
         if (drawing) {
             if (painting) {
-                mouseX = e.pageX - this.offsetLeft;
-                mouseY = e.pageY - this.offsetTop;
+                mouseX = e.pageX - this.parentNode.offsetLeft;
+                mouseY = e.pageY - this.parentNode.offsetTop;
                 var x1 = mouseX,
                     x2 = lastX,
                     y1 = mouseY,
@@ -89,12 +89,12 @@ function canvasInit() {
 
 function drawButtonClick() {
     if (drawing == false) {
-        $("#pagecanvas").css("z-index", 5);
+        $("#pagecanvas").css("z-index", 9999);
         drawing = true;
         $("#pencilicon").attr("src", "imgs/2newpencil.jpg");
     }
     else {
-        $("#pagecanvas").css("z-index", 1);
+        $("#pagecanvas").css("z-index", -9999);
         drawing = false;
         $("#pencilicon").attr("src", "imgs/2pencil.jpg");
     }
