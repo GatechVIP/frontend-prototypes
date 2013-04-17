@@ -42,15 +42,15 @@ $(document).ready(function() {
 	};
 	
 	$addbutton.click(function() {
-		var newdiv = $('<div><input type="text"/></div>');
+		var newdiv = $('<div><input type="text" size=10/></div>');
 		
-		var num = $('<input type="text" class="gradenum"/>');
+		var num = $('<input type="text" class="gradenum" size=2/>');
 		num.change(numChangeHandler);
 		num.appendTo(newdiv);
 		
-		$('<div>/</div>').appendTo(newdiv);
+		$(document.createTextNode('/')).appendTo(newdiv);
 		
-		var den = $('<input type="text" class="gradeden"/>');
+		var den = $('<input type="text" class="gradeden" size=2/>');
 		den.change(denChangeHandler);
 		den.appendTo(newdiv);
 		
