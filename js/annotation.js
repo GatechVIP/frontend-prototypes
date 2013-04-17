@@ -6,7 +6,13 @@ function annotate(e) {
     console.log(inText);
     if ($('div.popup').length == 0 && t.toString().length > 0) {
         inText = true;
-        $("body").append('<div class="popup" style="position:absolute; z-index: 5000; background-color:#FFFFFF; border-style:solid; top:' + e.pageY + 'px; left:' + e.pageX + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input type=button value="Save" onclick="saveComment(' + e.pageY + ')"></form></div>');
+        var popup = document.createElement("div");
+        popup.innerHTML = '<div class="popup" style="position:absolute; z-index: 5000; background-color:#FFFFFF; border-style:solid; top:' + e.pageY + 'px; left:' + e.pageX + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input id="save" type=button value="Save"></form></div>';
+        $("body").append(popup);
+        var saveButton = document.getElementById('save');
+        saveButton.onclick = function(){
+            saveComment(e.pageY,t);
+        }
     }
 }
 
@@ -46,10 +52,17 @@ function customAnnotate(e) {
     }
 }
 
-function saveComment(pageY) {
+function saveComment(pageY,t) {
     console.log("saveComment");
     $("body").append('<div class="margin" onclick="toggleEdit(this)" style="padding-right: 35px; z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '<div class="minmax" onclick="toggleminmax(this,true)" style="z-index:9000">_</div><div class="deleteannotation" onclick="deleteannotation(this)" style="z-index:9000">X</div></div>');
     $('div.popup').remove();
+    //Set Highlights
+    var el = document.createElement("span");
+    el.className = "highlight";
+    el.innerHTML = t.toString();
+    setHighlight(el);
+    //Set Links
+    setLink();
 }
 
 function toggleminmax(object, status) {
