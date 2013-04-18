@@ -1,16 +1,23 @@
 function annotate(e) {
     console.log("annotate");
-    var t = document.getSelection();
+    t = document.getSelection();
     console.log(inText);
     if ($('div.popup').length == 0 && t.toString().length > 0) {
         inText = true;
+        textSelection = t.toString();
         var popup = document.createElement("div");
         popup.innerHTML = '<div class="popup" style="position:absolute; z-index: 5000; background-color:#FFFFFF; border-style:solid; top:' + e.pageY + 'px; left:' + e.pageX + 'px;"><form name="annotation"><textarea rows=5 cols=25 id="annotate"></textarea><input id="save" type=button value="Save"></form></div>';
         $("body").append(popup);
         var saveButton = document.getElementById('save');
         saveButton.onclick = function(){
-            saveComment(e.pageY,t);
-        }
+            saveComment(e.pageY);
+        };
+        //Set Highlights
+        var el = document.createElement("span");
+        el.className = "highlight";
+        el.id = "highlight"+lineIndex;
+        el.innerHTML = textSelection;
+        setHighlight(el);
     }
 }
 
@@ -38,15 +45,15 @@ function customAnnotate(e) {
     }
 }
 
-function saveComment(pageY,t) {
+function saveComment(pageY) {
     console.log("saveComment");
-    $("body").append('<div class="margin" onclick="toggleEdit(this)" style="z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '</div>');
+    console.log(pageY + ', ' + textSelection);
+    // Update lastAnnotationTop if this annotation is higher than the last annotation
+    if (pageY < lastAnnotationTop){
+        pageY = lastAnnotationTop;
+    }     
+    $("body").append('<div class="margin" id="highlight'+lineIndex+ '" onclick="toggleEdit(this)" style="z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '</div>');
     $('div.popup').remove();
-    //Set Highlights
-    var el = document.createElement("span");
-    el.className = "highlight";
-    el.innerHTML = t.toString();
-    setHighlight(el);
     //Set Links
     setLink();
 }
@@ -68,6 +75,7 @@ function saveCommentRight(pageY) {
 
 function bodyClick() {
     console.log("bodyClick");
+    console.log(inText);
     if (inText == false) {
         $('div.popup').remove();
     }

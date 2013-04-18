@@ -19,7 +19,14 @@
             var inText = false;
             var gradesVisible = false;
             var rightTopPadding = 50;
-
+            var textSelection = '';
+            var t;
+            // Images used to draw the link
+            var preloadedImages;
+            // link index
+            var lineIndex = 0;
+            // avoid overlap
+            var lastAnnotationTop = 0;
             function load() {
                 canvasInit();
             }
@@ -139,6 +146,7 @@
                 </div>
             </div>
             <div class="content_mid" id="content" onclick="bodyClick()">
+                <h1 id="message">message</h1>
                 <p>Sample Document</p>
                 <p>&nbsp;</p>
                 <p>&emsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras consequat ullamcorper augue imperdiet semper. Aenean ac diam lectus. Etiam odio lorem, posuere eget lacinia et, tristique a justo. Phasellus dictum eleifend purus id tempus. Vestibulum at erat nec nunc tincidunt pharetra ac eu nulla. Duis venenatis viverra ante, in porta diam molestie nec. Nunc ligula erat, sollicitudin sed eleifend nec, facilisis ac justo. Vestibulum viverra tellus sit amet turpis venenatis congue. Curabitur quis odio lorem, at accumsan felis.</p>
@@ -173,6 +181,26 @@
                     <div style="height:40px"><input type="text" size=3 id="gradenumtot" disabled/>/<input type="text" size=3 id="gradedentot" disabled/></div>
                 </div>
             </div>
+        </div>
+        <div id="preload">
+            <img alt='' src='img/1up.gif' />
+            <img alt='' src='img/1down.gif' />
+            <img alt='' src='img/2up.gif' />
+            <img alt='' src='img/2down.gif' />
+            <img alt='' src='img/4up.gif' />
+            <img alt='' src='img/4down.gif' />
+            <img alt='' src='img/8up.gif' />
+            <img alt='' src='img/8down.gif' />
+            <img alt='' src='img/16up.gif' />
+            <img alt='' src='img/16down.gif' />
+            <img alt='' src='img/32up.gif' />
+            <img alt='' src='img/32down.gif' />
+            <img alt='' src='img/64up.gif' />
+            <img alt='' src='img/64down.gif' />
+            <img alt='' src='img/128up.gif' />
+            <img alt='' src='img/128down.gif' />
+            <img alt='' src='img/256up.gif' />
+            <img alt='' src='img/256down.gif' />
         </div>
     </body>
 </html>
