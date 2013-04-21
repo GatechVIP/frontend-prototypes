@@ -1,4 +1,12 @@
 span.highlight{
-	background-color: #ffb100;
+	background-color: yellow;
 }
-
+.line
+{
+	position:absolute;
+}
+#preload
+{
+	height:0;
+	overflow:hidden;
+}
