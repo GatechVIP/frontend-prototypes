@@ -67,7 +67,6 @@ function saveComment(pageY) {
         pageY = lastAnnotationTop;
     }     
     $("body").append('<div class="margin" id="highlight'+lineIndex+ '" onclick="toggleEdit(this)" style="padding-right: 35px; z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '<div class="minmax" onclick="toggleminmax(this,true)" style="z-index:9000">_</div><div class="deleteannotation" onclick="deleteannotation(this)" style="z-index:9000">X</div></div>');
-);
     $('div.popup').remove();
     //Set Links
     setLink();
