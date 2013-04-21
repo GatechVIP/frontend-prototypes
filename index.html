@@ -22,6 +22,7 @@
 
             function load() {
                 canvasInit();
+                shapeCanvasInit();
             }
         </script>
         <style type="text/css">
@@ -109,8 +110,10 @@
                     <div class="dropdown" id="colorpicker" style="display:none">
                         <img src="imgs/colorpicker.jpg" />
                     </div>
-                    <div class="dropdown" id="shapepicker" style="display:none; margin-left:60px">
+                    <div class="dropdown" id="shapepicker" style="display:none; margin-left:50px">
                         <img src="imgs/shapepicker.jpg" />
+                        <img id="recticon" src="imgs/rect.jpg" onclick="drawRectClick()" />
+                        <img id="circleicon" src="imgs/circle.jpg" onclick = "drawCircleClick()" />
                     </div>
                 </div>
             </div>
@@ -125,6 +128,7 @@
                 <p>&emsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras consequat ullamcorper augue imperdiet semper. Aenean ac diam lectus. Etiam odio lorem, posuere eget lacinia et, tristique a justo. Phasellus dictum eleifend purus id tempus. Vestibulum at erat nec nunc tincidunt pharetra ac eu nulla. Duis venenatis viverra ante, in porta diam molestie nec. Nunc ligula erat, sollicitudin sed eleifend nec, facilisis ac justo. Vestibulum viverra tellus sit amet turpis venenatis congue. Curabitur quis odio lorem, at accumsan felis.</p>
                 <p>&emsp;Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam vulputate felis nec arcu facilisis eu hendrerit eros eleifend. Nulla facilisi. Proin lobortis diam euismod justo scelerisque rutrum. Donec commodo, quam ut porta vehicula, massa magna malesuada urna, in volutpat metus lectus at ante. Fusce id vestibulum odio. Phasellus a quam eget nibh vulputate consectetur vel non dui. Nullam augue nisl, sagittis at sollicitudin sit amet, malesuada at nibh. Sed interdum varius nulla ac sagittis. Nunc commodo, risus id suscipit interdum, metus sem rhoncus felis, id congue elit est a mi. Cras a nisi lacus. Aenean faucibus tincidunt arcu, non tincidunt arcu gravida quis. Donec sapien diam, venenatis non interdum sed, dignissim sit amet nisi. Maecenas tempus eros odio, at semper lacus.</p>
             <canvas class="pagecanvas" id="pagecanvas"></canvas>
+            <canvas class="pagecanvas" id="shapecanvas"></canvas>
 			</div>
         </div>
         <div class="rightcontent" id="rightcontent">
