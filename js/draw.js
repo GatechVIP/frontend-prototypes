@@ -1,3 +1,4 @@
+var drawShape = "";
 function canvasInit() {
     var canvas = document.getElementById("pagecanvas"),
                     ctx = canvas.getContext("2d"),
@@ -13,6 +14,7 @@ function canvasInit() {
         if (drawing) {
             painting = true;
             ctx.fillStyle = "#CD1F21";
+            ctx.strokeStyle = "#CD1F21";
             lastX = e.pageX - this.parentNode.offsetLeft;
             lastY = e.pageY - this.parentNode.offsetTop;
         }
@@ -87,6 +89,68 @@ function canvasInit() {
     if (!document.all) document.captureEvents(Event.MOUSEUP);
 }
 
+function shapeCanvasInit() {
+    var canvas = document.getElementById("shapecanvas"),
+                    ctx = canvas.getContext("2d"),
+                    painting = false,
+                    firstX = 0,
+                    firstY = 0,
+                    mouseX,
+                    mouseY;
+
+    canvas.height = canvas.offsetHeight;
+    canvas.width = canvas.offsetWidth;
+    
+    canvas.onmousedown = function (e) {
+        if (drawing) {
+            painting = true;
+            ctx.strokeStyle = "#CD1F21";
+            console.log(drawShape);
+            firstX = e.pageX - this.parentNode.offsetLeft;
+            firstY = e.pageY - this.parentNode.offsetTop;
+        }
+    };
+
+    canvas.onmouseup = function (e) {
+        if (drawing) {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            painting = false;
+            var context = document.getElementById("pagecanvas").getContext("2d");
+            if(drawShape === "rect"){
+                drawRectOnCanvas(context, firstX, firstY, mouseX-firstX, mouseY-firstY);
+            }
+            else if(drawShape === "circle"){
+                drawEllipse(context, firstX, firstY, mouseX-firstX, mouseY-firstY);
+            }
+            
+        }
+    }
+
+    canvas.onmousemove = function (e) {
+        if (drawing) {
+            if (painting) {
+                ctx.clearRect(0,0, canvas.width, canvas.height);
+                mouseX = e.pageX - this.parentNode.offsetLeft;
+                mouseY = e.pageY - this.parentNode.offsetTop;
+                
+                if(drawShape === "rect") {
+                    drawRectOnCanvas(ctx, firstX, firstY, mouseX-firstX, mouseY-firstY);
+                }
+                else if(drawShape === "circle") {
+                    drawEllipse(ctx, firstX, firstY, mouseX-firstX, mouseY-firstY);
+                }
+                
+                
+            }
+        }
+    }
+
+    document.getElementById('content').onmouseup = annotate;
+    document.getElementById('annotatebutton').onclick = customAnnotate;
+    if (!document.all) document.captureEvents(Event.MOUSEUP);
+}
+
+
 function drawButtonClick() {
     if (drawing == false) {
         $("#pagecanvas").css("z-index", 9999);
@@ -124,4 +188,61 @@ function shapeButtonClick() {
         shapepickerVisible = false;
         $("#shapepicker").hide();
     }
+}
+
+function drawRectClick() {
+    if (drawing == false) {
+        $("#shapecanvas").css("z-index", 9999);
+        drawing = true;
+        drawShape = "rect";
+        $("#recticon").attr("src", "imgs/rect_red.jpg");
+    }
+    else {
+        $("#shapecanvas").css("z-index", -9999);
+        drawing = false;
+        $("#recticon").attr("src", "imgs/rect.jpg");
+    }
+}
+
+function drawCircleClick() {
+    if (drawing == false) {
+        $("#shapecanvas").css("z-index", 9999);
+        drawing = true;
+        drawShape = "circle";
+        $("#circleicon").attr("src", "imgs/circle_red.jpg");
+    }
+    else {
+        $("#shapecanvas").css("z-index", -9999);
+        drawing = false;
+        $("#circleicon").attr("src", "imgs/circle.jpg");
+    }
+}
+
+function drawRectOnCanvas(ctx, firstX, firstY, w, h){
+    ctx.strokeStyle = "#CD1F21";
+    ctx.beginPath();
+    ctx.rect(firstX, firstY, w, h);
+    ctx.closePath();
+    ctx.stroke();
+}
+
+//Function from Stack Overflow (http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas)
+function drawEllipse(ctx, x, y, w, h) {
+  ctx.strokeStyle = "#CD1F21";
+  var kappa = .5522848,
+      ox = (w / 2) * kappa, // control point offset horizontal
+      oy = (h / 2) * kappa, // control point offset vertical
+      xe = x + w,           // x-end
+      ye = y + h,           // y-end
+      xm = x + w / 2,       // x-middle
+      ym = y + h / 2;       // y-middle
+
+  ctx.beginPath();
+  ctx.moveTo(x, ym);
+  ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+  ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+  ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+  ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+  ctx.closePath();
+  ctx.stroke();
 }
