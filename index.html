@@ -19,7 +19,14 @@
             var inText = false;
             var gradesVisible = false;
             var rightTopPadding = 50;
-
+            var textSelection = '';
+            var t;
+            // Images used to draw the link
+            var preloadedImages;
+            // link index
+            var lineIndex = 0;
+            // avoid overlap
+            var lastAnnotationTop = 0;
             function load() {
                 canvasInit();
                 shapeCanvasInit();
@@ -156,6 +163,26 @@
 				</div>
 				<div>Total     <input type="text" size=3 id="gradenumtot" disabled/>/<input type="text" size=3 id="gradedentot" disabled/></div>
             </div>
+        </div>
+        <div id="preload">
+            <img alt='' src='img/1up.gif' />
+            <img alt='' src='img/1down.gif' />
+            <img alt='' src='img/2up.gif' />
+            <img alt='' src='img/2down.gif' />
+            <img alt='' src='img/4up.gif' />
+            <img alt='' src='img/4down.gif' />
+            <img alt='' src='img/8up.gif' />
+            <img alt='' src='img/8down.gif' />
+            <img alt='' src='img/16up.gif' />
+            <img alt='' src='img/16down.gif' />
+            <img alt='' src='img/32up.gif' />
+            <img alt='' src='img/32down.gif' />
+            <img alt='' src='img/64up.gif' />
+            <img alt='' src='img/64down.gif' />
+            <img alt='' src='img/128up.gif' />
+            <img alt='' src='img/128down.gif' />
+            <img alt='' src='img/256up.gif' />
+            <img alt='' src='img/256down.gif' />
         </div>
     </body>
 </html>

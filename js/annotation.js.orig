@@ -61,12 +61,16 @@ function customAnnotate(e) {
 
 function saveComment(pageY) {
     console.log("saveComment");
+<<<<<<< HEAD
+    $("body").append('<div class="margin" onclick="toggleEdit(this)" style="padding-right: 35px; z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '<div class="minmax" onclick="toggleminmax(this,true)" style="z-index:9000">_</div><div class="deleteannotation" onclick="deleteannotation(this)" style="z-index:9000">X</div></div>');
+=======
     console.log(pageY + ', ' + textSelection);
     // Update lastAnnotationTop if this annotation is higher than the last annotation
     if (pageY < lastAnnotationTop){
         pageY = lastAnnotationTop;
     }     
-    $("body").append('<div class="margin" id="highlight'+lineIndex+ '" onclick="toggleEdit(this)" style="padding-right: 35px; z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '<div class="minmax" onclick="toggleminmax(this,true)" style="z-index:9000">_</div><div class="deleteannotation" onclick="deleteannotation(this)" style="z-index:9000">X</div></div>');
+    $("body").append('<div class="margin" id="highlight'+lineIndex+ '" onclick="toggleEdit(this)" style="z-index:1000; position:absolute; top:' + pageY + 'px">' + $("#annotate").val() + '</div>');
+>>>>>>> c50f2814797204e0523b595445881ca84539046a
     $('div.popup').remove();
     //Set Links
     setLink();
